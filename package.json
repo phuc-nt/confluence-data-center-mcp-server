@@ -1,0 +1,39 @@
+{
+  "name": "confluence-dc-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Confluence Data Center integration with Personal Access Token authentication",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "confluence-dc-mcp-server": "build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/index.js",
+    "clean": "rm -rf build"
+  },
+  "keywords": [
+    "confluence",
+    "data-center",
+    "mcp",
+    "server",
+    "enterprise",
+    "personal-access-token"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

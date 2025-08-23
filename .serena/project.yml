@@ -1,0 +1,26 @@
+project_name: confluence-dc-mcp-server
+language: typescript
+description: "MCP server for Confluence Data Center integration with Personal Access Token authentication"
+
+# Project structure and paths
+source_paths:
+  - src/
+  - docs/
+
+# File patterns to include/exclude
+include_patterns:
+  - "*.ts"
+  - "*.js" 
+  - "*.json"
+  - "*.md"
+
+exclude_patterns:
+  - node_modules/
+  - build/
+  - "*.log"
+  - .env
+
+# Project metadata
+framework: nodejs
+build_tool: typescript
+main_entry: src/index.ts
