@@ -8,79 +8,92 @@
 ## Sub-Sprint Overview
 
 ### Objective
-Complete Sprint 1 by implementing the remaining tools (deletePage, searchPages) and conducting comprehensive integration testing.
+Complete Sprint 1 by implementing the remaining page management tools (deletePage, getSpaces) per tool reference and conducting comprehensive integration testing for all 5 page management tools.
 
 ### Focus Areas
-- Page deletion functionality
-- Universal page search for context
-- End-to-end workflow integration testing
-- Data Center API v1 validation
+- Page deletion functionality with soft/hard delete options per reference
+- Space discovery and navigation support via getSpaces per reference
+- Complete page management workflow integration testing
+- Data Center REST API v1 validation per reference specifications
 
 ### Deliverables
-- deletePage tool: Remove pages with proper handling
-- searchPages tool: Universal page search with filters
-- Integration testing of all 5 tools
-- Sprint 1 completion validation
+- deletePage tool: Enhanced page removal with trashing support per reference
+- getSpaces tool: Complete space discovery with permissions and metadata per reference
+- Comprehensive integration testing of all 5 page management tools
+- Sprint 1 completion validation against enhanced success criteria
 
 ## Task Breakdown
 
 ### Day 1: Remaining Tools (1MD)
 
-#### T1.3.1: deletePage Tool (0.5 day)
+#### T1.3.1: deletePage Tool Implementation (0.5 day)
 **Status**: Not Started  
 **Estimate**: 0.5 day  
-**Priority**: Medium  
-**API**: `DELETE /rest/api/content/{pageId}`
+**Priority**: Critical  
+**API**: `DELETE /wiki/rest/api/content/{pageId}?status=trashed`
 
-**Tasks**:
-- Implement API call to delete pages
-- Handle soft delete vs permanent delete options
-- Add confirmation and error handling
-- Test page deletion and verify removal
+**Enhanced Implementation Tasks**:
+- Implement comprehensive API call for page deletion per reference
+- Handle enhanced soft delete vs permanent delete options with status parameter
+- Add comprehensive confirmation and error handling per reference error scenarios
+- Support cascading delete for page hierarchies
+- Test page deletion and verify removal with status tracking
 
-**Implementation Reference**: 
-- Tool pattern: [Implementation Guide - Standard Tool Structure](../00_context/implementation-guide.md#standard-tool-structure)
-- API mapping: See [confluence-data-center-tools-reference.md](../00_context/confluence-data-center-tools-reference.md) (deletePage section)
+**Tool Reference Compliance**: 
+- API endpoint: `DELETE /wiki/rest/api/content/{pageId}` per reference section 1.4
+- Enhanced delete options with status=trashed for soft delete per reference
+- Complete error handling scenarios as documented (401, 403, 404)
+- Enhanced response structure with deletion confirmation per reference
 
-**Data Center Specific**:
-- Support `status=trashed` query parameter for soft delete
-- Handle permanent deletion confirmation
-- Proper authorization checking
+**Data Center REST v1 Features**:
+- Complete `status=trashed` query parameter support for recoverable soft delete
+- Administrative permanent deletion support (no status parameter)
+- Enhanced authorization checking with detailed permission context
+- Cascading delete effect documentation and handling
 
-**Acceptance Criteria**:
-- Tool deletes pages successfully
-- Soft delete option works (move to trash)
-- Proper error handling for permission issues
-- Deletion confirmed in Confluence UI
+**Enhanced Acceptance Criteria**:
+- Tool deletes pages successfully with complete status tracking
+- Enhanced soft delete option works (recoverable trash) per reference specifications
+- Permanent delete option for administrative use cases
+- Comprehensive error handling for all permission and validation scenarios (401, 403, 404)
+- Deletion confirmation properly tracked in Confluence UI and system logs
+- Complete response structure per reference including deletion metadata
 
 ---
 
-#### T1.3.2: searchPages Tool (0.5 day)
+#### T1.3.2: getSpaces Tool Implementation (0.5 day)
 **Status**: Not Started  
 **Estimate**: 0.5 day  
-**Priority**: Medium  
-**API**: `GET /rest/api/content`
+**Priority**: Critical  
+**API**: `GET /wiki/rest/api/space?start={start}&limit={limit}&expand=description,homepage,permissions`
 
-**Tasks**:
-- Implement API call to search pages with filters
-- Handle pagination for large result sets
-- Return formatted page information
-- Test with various search configurations
+**Enhanced Implementation Tasks**:
+- Implement comprehensive API call for space discovery per reference
+- Handle enhanced pagination for large space collections with start/limit
+- Include complete space metadata retrieval (description, homepage, permissions) per reference
+- Return comprehensive formatted space information for navigation and context
+- Test with various space configurations and permission levels
 
-**Implementation Reference**: 
-- Tool pattern: [Implementation Guide - Standard Tool Structure](../00_context/implementation-guide.md#standard-tool-structure)
-- API mapping: See [confluence-data-center-tools-reference.md](../00_context/confluence-data-center-tools-reference.md) (getPages section)
+**Tool Reference Compliance**: 
+- API endpoint: `GET /wiki/rest/api/space` per reference section 1.5
+- Complete expand parameters: description, homepage, permissions per reference
+- Enhanced response structure with space metadata, permissions, and _links per reference
+- Complete error handling scenarios as documented (401, 403)
 
-**Data Center Specific**:
-- Use query parameters for filtering (title, spaceKey, status)
-- Offset-based pagination with start/limit
-- Type filter for pages vs other content
+**Data Center REST v1 Features**:
+- Enhanced query parameters for filtering and pagination (start, limit, expand)
+- Complete offset-based pagination with comprehensive result metadata
+- Space permission discovery for access validation and workflow planning
+- Homepage and description metadata for enhanced space context
 
-**Acceptance Criteria**:
-- Tool searches pages with title and spaceKey filters
-- Pagination works for large result sets
-- Page information includes space details
-- Handles empty search results gracefully
+**Enhanced Acceptance Criteria**:
+- Tool discovers spaces successfully with comprehensive metadata per reference
+- Enhanced pagination works for large space collections with proper start/limit handling
+- Complete space information includes ID, key, name, type, description, homepage, permissions per reference
+- Space permission information properly structured for access validation
+- Handles empty space results gracefully with proper pagination metadata
+- Complete error handling for permission and access scenarios (401, 403)
+- Response structure optimized for navigation and workspace discovery workflows
 
 ---
 
@@ -91,35 +104,44 @@ Complete Sprint 1 by implementing the remaining tools (deletePage, searchPages) 
 **Estimate**: 0.75 day  
 **Priority**: Critical
 
-**Test Scenarios**:
-- **Complete Page Lifecycle**: searchPages → createPage → getPageContent → updatePage → deletePage
-- **Error Handling**: Invalid IDs, permissions, malformed content
-- **Content Format**: Various storage format content types
-- **Version Management**: Update conflicts and resolution
+**Enhanced Test Scenarios**:
+- **Complete Page Management Lifecycle**: getSpaces → createPage → getPageContent → updatePage → deletePage
+- **Space Discovery Workflow**: getSpaces for context → createPage in discovered space
+- **Enhanced Error Handling**: Invalid IDs, permissions, malformed content, version conflicts
+- **Content Format Validation**: Various storage format content types with enhanced validation
+- **Version Management**: Update conflicts and resolution with detailed conflict handling
+- **Hierarchical Operations**: Parent-child page creation and relationship management
 
-**Integration Test Workflow**:
+**Enhanced Integration Test Workflow**:
 ```typescript
-// Integration test scenario
-1. searchPages() - Find existing pages in test space
-2. createPage() - Create test page in space using spaceKey
-3. getPageContent() - Verify page creation and content
-4. updatePage() - Modify page title and content
-5. getPageContent() - Verify updates applied
-6. deletePage() - Clean up test page
+// Enhanced integration test scenario for page management
+1. getSpaces() - Discover available spaces with permissions
+2. createPage() - Create test page in discovered space using spaceKey
+3. createPage() - Create child page with parent hierarchy (ancestors array)
+4. getPageContent() - Verify page creation, content, and hierarchy
+5. updatePage() - Modify page title and content with version control
+6. getPageContent() - Verify updates applied with version increment
+7. deletePage() - Clean up child page (test soft delete)
+8. deletePage() - Clean up parent page (complete cleanup)
 ```
 
-**Data Center Specific Validation**:
-- Personal Access Token authentication across all tools
-- spaceKey handling (string format)
-- API v1 endpoint responses
-- SSL certificate handling if applicable
+**Enhanced Data Center Specific Validation**:
+- Bearer Personal Access Token authentication across all 5 page management tools
+- Complete spaceKey handling (string format) with validation per reference
+- Enhanced API REST v1 endpoint responses per reference specifications
+- SSL certificate handling for enterprise environments
+- Expand parameter utilization across getPageContent and getSpaces
+- Version control and conflict handling validation for updatePage
 
-**Validation Checklist**:
-- All 5 tools execute without errors
-- MCP server remains stable under load
-- Error responses don't crash server
-- Tool responses format correctly for AI clients
-- Personal Access Token authentication remains valid across calls
+**Enhanced Validation Checklist**:
+- All 5 page management tools execute without errors per reference specifications
+- MCP server remains stable under comprehensive workflow load testing
+- Enhanced error responses don't crash server with detailed error context
+- Tool responses format correctly for AI clients per reference response structures
+- Bearer Personal Access Token authentication remains valid across all tool calls
+- Hierarchical page operations working correctly (parent-child relationships)
+- Space discovery and permission validation working across all tools
+- Complete storage format content handling with validation
 
 ---
 
@@ -134,51 +156,53 @@ Complete Sprint 1 by implementing the remaining tools (deletePage, searchPages) 
 - Document any issues or deviations
 - Prepare handoff documentation for Sprint 2
 
-**Sprint 1 Success Criteria Review** (from [Project Roadmap](../01_plan/project-roadmap.md)):
-- MCP server connects and responds to client requests
-- Personal Access Token authentication working with Confluence Data Center
-- All 5 tools operational and tested with real API
-- Basic error handling prevents server crashes
-- Integration testing validates complete workflows
-- SSL certificate handling functional
+**Enhanced Sprint 1 Success Criteria Review** (from [Project Roadmap](../01_plan/project-roadmap.md)):
+- MCP server connects and responds to client requests per reference specifications
+- Bearer Personal Access Token authentication working with Confluence Data Center per reference
+- All 5 page management tools operational and tested with real API per reference specifications
+- Comprehensive error handling prevents server crashes with detailed user feedback
+- Enhanced integration testing validates complete page management workflows
+- SSL certificate handling functional for enterprise environments
+- Complete page management tools: createPage, getPageContent, updatePage, deletePage, getSpaces
+- Hierarchical page creation and relationship management operational
 
 ---
 
 ## Tool Registration & Architecture
 
-### Complete Tool Registration
+### Complete Page Management Tool Registration
 ```typescript
 // src/tools/confluence/index.ts
 import { registerCreatePageTool } from './create-page.js';
 import { registerGetPageContentTool } from './get-page-content.js';
 import { registerUpdatePageTool } from './update-page.js';
 import { registerDeletePageTool } from './delete-page.js';
-import { registerSearchPagesTool } from './search-pages.js';
+import { registerGetSpacesTool } from './get-spaces.js';
 
 export function registerAllSprint1Tools(server: McpServerWrapper) {
   registerCreatePageTool(server);
   registerGetPageContentTool(server);  
   registerUpdatePageTool(server);
   registerDeletePageTool(server);
-  registerSearchPagesTool(server);
+  registerGetSpacesTool(server);
 }
 ```
 
-### Final API Client Status
+### Enhanced API Client Status
 ```typescript
-// src/utils/confluence-api.ts - Complete Sprint 1 methods
+// src/utils/confluence-api.ts - Complete Sprint 1 Page Management methods
 class ConfluenceDataCenterApiClient {
   // Infrastructure
   constructor(config: ConfluenceDataCenterConfig)
   private async request(endpoint: string, options: RequestOptions)
   async testConnection(): Promise<boolean>
   
-  // Sprint 1 tools
+  // Sprint 1 Page Management tools (5 tools per reference)
   async createPage(data: CreatePageData): Promise<Page>
   async getPageContent(pageId: string, expand?: string): Promise<PageWithContent>
   async updatePage(pageId: string, data: UpdatePageData): Promise<Page>
-  async deletePage(pageId: string, status?: string): Promise<void>
-  async searchPages(params: SearchPagesParams): Promise<PagesResult>
+  async deletePage(pageId: string, status?: string): Promise<DeletePageResponse>
+  async getSpaces(params: GetSpacesParams): Promise<SpacesResult>
 }
 ```
 
@@ -216,31 +240,35 @@ class ConfluenceDataCenterApiClient {
 - **Error Scenarios**: Test common failure cases
 - **Documentation**: Update implementation guide with actual patterns
 
-## Sub-Sprint Completion Criteria
+## Enhanced Sub-Sprint Completion Criteria
 
-- deletePage and searchPages tools implemented and working
-- All 5 Sprint 1 tools registered and tested
-- End-to-end integration testing passed
-- Sprint 1 success criteria met and documented
-- Roadmap updated with completion status
+- deletePage and getSpaces tools implemented per reference specifications and working
+- All 5 Sprint 1 page management tools registered and comprehensively tested
+- Enhanced end-to-end integration testing passed with hierarchical operations
+- Enhanced Sprint 1 success criteria met and documented per reference
+- Project roadmap updated with completion status and tool compliance validation
+- All tools fully compliant with tool reference API mappings and response structures
 
 ## Sprint 1 Completion & Handoff
 
-### Sprint 1 Final Deliverables
-- 5 operational tools: searchPages, getPageContent, createPage, updatePage, deletePage
-- MCP server infrastructure with Confluence Data Center integration  
-- API client with Personal Access Token authentication
-- Basic error handling and validation
-- Integration testing validation
-- SSL certificate handling
+### Enhanced Sprint 1 Final Deliverables
+- 5 operational page management tools per reference: createPage, getPageContent, updatePage, deletePage, getSpaces
+- Enhanced MCP server infrastructure with comprehensive Confluence Data Center REST API v1 integration  
+- Complete API client with Bearer Personal Access Token authentication per reference
+- Comprehensive error handling and validation per reference specifications
+- Enhanced integration testing validation with hierarchical operations
+- Enterprise SSL certificate handling for production environments
+- Complete page management workflows with space discovery and hierarchical operations
+- Full compliance with tool reference API mappings and response structures
 
 ### Preparation for Sprint 2
-Sprint 2 will focus on search capabilities and metadata access. The foundation established in Sprint 1 provides:
-- Working API client ready for extension
-- Tool registration patterns established
-- Error handling framework in place
-- Data Center API v1 integration patterns
-- Development environment operational
+Sprint 2 will focus on search & discovery capabilities per reference (searchPages, getPageVersions). The enhanced foundation established in Sprint 1 provides:
+- Complete API client ready for extension with comprehensive expand parameter patterns
+- Enhanced tool registration patterns established per reference specifications
+- Comprehensive error handling framework in place per reference
+- Complete Data Center REST API v1 integration patterns established per reference
+- Fully operational development environment with Bearer PAT authentication
+- Complete page management workflows as foundation for search and discovery operations
 
 ### Next Steps
 1. **Review**: Sprint 1 completion against [Project Roadmap](../01_plan/project-roadmap.md)
@@ -252,4 +280,4 @@ Sprint 2 will focus on search capabilities and metadata access. The foundation e
 
 **Sub-Sprint Status**: Not Started  
 **Duration**: 2 working days  
-**Sprint 1 Goal**: 5 core page management tools operational with Data Center integration
+**Sprint 1 Goal**: 5 complete page management tools operational with enhanced Data Center integration per reference

@@ -20,6 +20,8 @@ import { validateEnvironment } from './utils/error-handler.js';
 import { healthCheck } from './tools/health-check.js';
 import { connectionTest } from './tools/connection-test.js';
 import { initializeServerContext } from './utils/server-context.js';
+import { getConfluenceTools } from './tools/confluence/index.js';
+import { executeCreatePage } from './tools/confluence/create-page.js';
 
 // Load environment variables
 dotenv.config();
@@ -74,6 +76,8 @@ async function main() {
 
     // Setup tool handlers
     server.setRequestHandler(ListToolsRequestSchema, async () => {
+      const confluenceTools = getConfluenceTools();
+      
       return {
         tools: [
           {
@@ -105,7 +109,8 @@ async function main() {
               },
               additionalProperties: false
             }
-          }
+          },
+          ...confluenceTools
         ],
       };
     });
@@ -120,6 +125,10 @@ async function main() {
           
           case 'connection-test':
             return await connectionTest(request.params.arguments as any);
+
+          case 'createPage':
+            const result = await executeCreatePage(request.params.arguments as any, serverContext.confluenceApi);
+            return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
           
           default:
             throw new McpError(

@@ -11,13 +11,13 @@
 | Sprint | Status | Tools | Duration | Progress |
 |--------|--------|-------|----------|----------|
 | **Sprint 1** | In Progress | 5 tools | 8MD | 3/8 days ✅ |
-| **Sprint 2** | Pending | +3 tools | 7MD | 0/7 days |
-| **Sprint 3** | Pending | +3 tools | 5MD | 0/5 days |
+| **Sprint 2** | Pending | +2 tools | 7MD | 0/7 days |
+| **Sprint 3** | Pending | +4 tools | 5MD | 0/5 days |
 
 ### Next Actions
 - **Immediate**: Begin Sprint 1.2 - Core Page Tools implementation
-- **This Sprint**: Complete 5 core page management tools (infrastructure ✅ completed)
-- **Sprint Goal**: Core page operations functional (searchPages, getPageContent, updatePage, deletePage, getSpaces)
+- **This Sprint**: Complete 5 page management tools (infrastructure ✅ completed)
+- **Sprint Goal**: Complete page management functional (createPage, getPageContent, updatePage, deletePage, getSpaces)
 
 ---
 
@@ -33,35 +33,35 @@
 **Duration**: 8 working days  
 **Goal**: Core page operations and Data Center server infrastructure
 
-#### Sprint 1: Foundation & Page CRUD (8MD)
+#### Sprint 1: Page Management Complete (8MD)
 - Project initialization and MCP server setup
 - Confluence Data Center API client integration  
 - Personal Access Token authentication
-- Page management tools: createPage, updatePage, deletePage
-- Page content retrieval: getPageContent with labels
+- Complete page management: createPage, getPageContent, updatePage, deletePage
+- Space discovery: getSpaces for context and navigation
 - SSL certificate handling for enterprise environments
 
-**Milestone 1**: Core page operations functional (5 tools)
+**Milestone 1**: Complete page management functional (5 tools)
 
 ### Phase 2: Search & Discovery (Sprint 2)  
 **Duration**: 7 working days  
 **Goal**: Search capabilities and metadata access
 
-#### Sprint 2: Search & Metadata (7MD)
-- Universal page search: searchPages with filters
-- Space discovery: getSpaces for context
-- Page version history: getPageVersions
+#### Sprint 2: Search & Discovery (7MD)
+- Universal page search: searchPages with CQL filtering
+- Page version history: getPageVersions for change tracking
 - Error handling standardization across all tools
+- Integration testing for all page and search tools
 
-**Milestone 2**: Search and discovery complete (8 tools total)
+**Milestone 2**: Search and discovery complete (7 tools total)
 
 ### Phase 3: Comments & Production (Sprint 3)
 **Duration**: 5 working days  
 **Goal**: Comment system and production readiness
 
-#### Sprint 3: Comments & Production (5MD)
-- Comment system: getPageComments, addComment, updateComment, deleteComment
-- Content format validation and handling
+#### Sprint 3: Comment System & Production (5MD)
+- Complete comment system: getPageComments, addComment, updateComment, deleteComment
+- Content format validation and threading support
 - NPM package preparation and distribution
 - Documentation completion and AI client testing
 
@@ -70,22 +70,17 @@
 ## Tool Distribution Strategy
 
 ### Development Priority
-1. **Page Management** (3 tools) - Critical
-   - createPage, updatePage, deletePage
-   - Core functionality for content creation
-   - Foundation for all workflows
+1. **Page Management** (5 tools) - Critical
+   - createPage, getPageContent, updatePage, deletePage, getSpaces
+   - Core functionality for content creation and space discovery
+   - Foundation for all workflows and AI content operations
 
-2. **Content Access** (2 tools) - Critical
-   - getPageContent (with labels), getSpaces
-   - Essential for reading and context discovery
-   - Required for AI content workflows
-
-3. **Search & Discovery** (2 tools) - High
+2. **Search & Discovery** (2 tools) - High
    - searchPages, getPageVersions
-   - Enhanced content discovery
+   - Enhanced content discovery with CQL
    - Version tracking capabilities
 
-4. **Comment System** (4 tools) - Medium
+3. **Comment System** (4 tools) - Medium
    - getPageComments, addComment, updateComment, deleteComment
    - Collaboration and interaction features
    - Complete comment lifecycle management
@@ -93,9 +88,9 @@
 ### Single Server Configuration
 | Component | Tools | Priority | Sprint | Duration |
 |-----------|-------|----------|---------|----------|
-| **Foundation** | 5 tools | Critical | Sprint 1 | 8MD |
-| **Discovery** | +3 tools (8 total) | High | Sprint 2 | 7MD |
-| **Comments** | +3 tools (11 total) | Medium | Sprint 3 | 5MD |
+| **Page Management** | 5 tools | Critical | Sprint 1 | 8MD |
+| **Search & Discovery** | +2 tools (7 total) | High | Sprint 2 | 7MD |
+| **Comment System** | +4 tools (11 total) | Medium | Sprint 3 | 5MD |
 | **Production** | Complete server | Ready | Sprint 3 | **Total: 20MD** |
 
 ## Feature Delivery Timeline
@@ -164,14 +159,14 @@ gantt
 ### Sprint 1 Success Criteria
 - MCP server connects successfully to Data Center instance
 - Personal Access Token authentication working
-- 5 core tools operational: searchPages, getPageContent, updatePage, deletePage, getSpaces
-- Page CRUD operations validated with real API
+- 5 page management tools operational: createPage, getPageContent, updatePage, deletePage, getSpaces
+- Complete page CRUD operations validated with real API
 - Basic error handling implemented
 - SSL certificate handling functional
 
 ### Sprint 2 Success Criteria
-- 8 tools total (Foundation + Discovery)
-- Universal page search working: searchPages
+- 7 tools total (Page Management + Search & Discovery)
+- Universal page search working: searchPages with CQL
 - Page version history access: getPageVersions  
 - Error handling standardized across all tools
 - Integration testing complete
@@ -202,9 +197,9 @@ gantt
 ## Resource Allocation
 
 ### Development Focus Distribution
-- **45%** - Page management (core CRUD operations)
-- **25%** - Search & discovery (content access)
-- **20%** - Comment system (collaboration features)  
+- **45%** - Page management (5 tools: createPage, getPageContent, updatePage, deletePage, getSpaces)
+- **20%** - Search & discovery (2 tools: searchPages, getPageVersions)
+- **25%** - Comment system (4 tools: getPageComments, addComment, updateComment, deleteComment)  
 - **10%** - Infrastructure & integration
 
 ### Time Allocation by Activity
@@ -223,5 +218,5 @@ gantt
 ---
 
 **Project Status**: Planning Complete - Ready for Implementation  
-**Next Milestone**: Sprint 1 completion - Core page operations functional (5 tools)  
+**Next Milestone**: Sprint 1 completion - Complete page management functional (5 tools)  
 **Timeline**: 20 working days total delivery

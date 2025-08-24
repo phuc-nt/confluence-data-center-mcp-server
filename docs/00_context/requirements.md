@@ -22,25 +22,25 @@
 
 ## Core Features & Capabilities
 
-### Essential Tools (Single Server - 11 tools)
-**Focus**: Complete Confluence operations without module complexity
+### Essential Tools (Single Server - 11 tools per tool reference)
+**Focus**: Complete Confluence operations with enterprise workflow support
 
-#### Page Discovery & Access
-- **searchPages**: Universal page search with filters (title, spaceKey, status)
-- **getPageContent**: Get complete page information with content body and labels
-- **getPageVersions**: Get page edit history and versions
-- **getSpaces**: List available spaces with permissions
+#### Page Management Tools (5 tools - Sprint 1)
+- **createPage**: Create new pages with hierarchical organization support (spaceKey, ancestors)
+- **getPageContent**: Complete page data retrieval with comprehensive expansion (content, labels, versions, ancestors, children)
+- **updatePage**: Page content and title modification with version control and conflict handling
+- **deletePage**: Enhanced page removal with soft delete (trashing) and permanent delete options
+- **getSpaces**: Space discovery with permissions and metadata for navigation and context
 
-#### Page Management  
-- **createPage**: Create new pages (requires spaceKey)
-- **updatePage**: Modify page title and content
-- **deletePage**: Remove pages (move to trash or permanent delete)
+#### Search & Discovery Tools (2 tools - Sprint 2)
+- **searchPages**: Universal page search with advanced CQL filtering and multi-criteria support
+- **getPageVersions**: Complete version history for change tracking and rollback preparation
 
-#### Comment System
-- **getPageComments**: Retrieve all comments (footer + inline) for pages
-- **addComment**: Add new footer comments to pages
-- **updateComment**: Modify existing comment content
-- **deleteComment**: Remove comments with proper authorization
+#### Comment Management Tools (4 tools - Sprint 3)
+- **getPageComments**: Complete comment retrieval with threading support for reviews and discussions
+- **addComment**: Add comments and threaded replies with mention support
+- **updateComment**: Edit comments with version control for corrections and context additions
+- **deleteComment**: Remove comments with cascading delete for nested replies
 
 ## Technical Architecture
 
@@ -49,7 +49,7 @@
 - **Runtime**: Node.js 16+ with ES modules
 - **Protocol**: Model Context Protocol (MCP) SDK
 - **APIs**: Confluence Server/Data Center REST API
-- **Authentication**: Personal Access Token only
+- **Authentication**: Personal Access Token with Bearer header per tool reference
 - **Build System**: TypeScript compiler
 
 ### Simple Architecture Pattern
@@ -61,17 +61,18 @@ confluence-dc-mcp-server/
 ### Key Architecture Principles
 - **Tools-Only Architecture**: Direct action execution, no resources layer
 - **Fast Deployment**: Prioritize functionality over performance optimization
-- **Flexible Authentication**: Support both PAT and Basic Auth
+- **Bearer Token Authentication**: Personal Access Token with Bearer header per tool reference
 - **Simple Error Handling**: Basic error responses, no complex retry logic
 - **Minimal Dependencies**: Core libraries only for rapid development
 
 ## API Integration Requirements
 
 ### Confluence Data Center APIs Used
-- **Primary**: Confluence Server REST API v1
-- **Base URL**: `https://{your-domain}/confluence/rest/api` or custom context path
+- **Primary**: Confluence Data Center REST API v1 per tool reference
+- **Base URL**: `https://{your-domain}/wiki/rest/api` or custom context path per tool reference  
 - **Space Identifier**: String spaceKey for space operations
 - **Pagination**: Offset-based with start/limit parameters
+- **Authentication**: Bearer Personal Access Token header per tool reference
 
 For complete authentication options, API endpoints, and technical implementation details, see [confluence-data-center-tools-reference.md](confluence-data-center-tools-reference.md).
 

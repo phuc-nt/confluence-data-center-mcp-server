@@ -10,10 +10,11 @@ For detailed API endpoints and tool specifications, see [confluence-data-center-
 ## Data Center API Architecture
 
 ### API Characteristics
-- **API Version**: REST API v1 (`/rest/api/`)
+- **API Version**: REST API v1 (`/wiki/rest/api/`) per tool reference
 - **Space Identifiers**: String `spaceKey` for space operations
-- **Pagination**: Offset-based with `start`/`limit` parameters
-- **Authentication**: Personal Access Token with `Bearer` header
+- **Pagination**: Offset-based with `start`/`limit` parameters  
+- **Authentication**: Personal Access Token with `Bearer` header per tool reference
+- **Expand Parameters**: Comprehensive utilization for single-call data retrieval
 
 ### Enterprise Considerations
 - **Custom Context Paths**: Support `/confluence` and custom deployment paths
@@ -75,10 +76,10 @@ export function validateDataCenterConfig(): void {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
   
-  // Data Center specific validation
+  // Data Center specific validation per tool reference
   const baseUrl = process.env.CONFLUENCE_BASE_URL!;
-  if (!baseUrl.includes('/confluence') && !baseUrl.endsWith('/rest/api')) {
-    console.warn('Base URL may need /confluence context path for Data Center deployments');
+  if (!baseUrl.includes('/confluence') && !baseUrl.endsWith('/wiki/rest/api')) {
+    console.warn('Base URL may need /confluence context path and should use /wiki/rest/api endpoint per reference');
   }
 }
 ```
@@ -169,31 +170,32 @@ export class ConfluenceDataCenterClient {
 
 ### Tool Registration Pattern
 ```typescript
-// src/tools/confluence/search-pages.ts
+// src/tools/confluence/create-page.ts
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { ConfluenceDataCenterClient } from '../../utils/confluence-api.js';
 
-export const searchPagesTool: Tool = {
-  name: 'searchPages',
-  description: 'Search pages across Confluence Data Center with filters',
+export const createPageTool: Tool = {
+  name: 'createPage',
+  description: 'Create new Confluence page in Data Center using spaceKey per tool reference',
   inputSchema: {
     type: 'object',
     properties: {
-      title: { type: 'string', description: 'Filter by page title' },
-      spaceKey: { type: 'string', description: 'Filter by space key (string, not numeric)' },
-      status: { type: 'string', enum: ['current', 'trashed', 'archived'] },
-      start: { type: 'number', description: 'Starting index for pagination' },
-      limit: { type: 'number', description: 'Number of results (max 200)' }
-    }
+      spaceKey: { type: 'string', description: 'Required: Space key (string format)' },
+      title: { type: 'string', description: 'Required: Page title' },
+      content: { type: 'string', description: 'Required: Content in Confluence storage format' },
+      parentId: { type: 'string', description: 'Optional: Parent page ID for hierarchy' }
+    },
+    required: ['spaceKey', 'title', 'content']
   }
 };
 
-export async function executeSearchPages(
+export async function executeCreatePage(
   params: any,
   client: ConfluenceDataCenterClient
 ): Promise<any> {
-  // Implementation uses Data Center API patterns
-  // See confluence-data-center-tools-reference.md for complete endpoint details
+  // Implementation uses Data Center REST API v1 patterns per tool reference
+  // API endpoint: POST /wiki/rest/api/content
+  // See confluence-data-center-tools-reference.md section 1.1 for complete details
 }
 ```
 
@@ -201,12 +203,13 @@ export async function executeSearchPages(
 
 For complete API endpoint mappings, request/response formats, and Data Center specific implementations, see [confluence-data-center-tools-reference.md](confluence-data-center-tools-reference.md).
 
-**Key Mapping Notes**:
-- `searchPages` → `GET /rest/api/content` with query filters
-- `getPageContent` → `GET /rest/api/content/{id}?expand=body.storage,version,space,ancestors`
-- `getSpaces` → `GET /rest/api/space` with offset pagination
-- `createPage` → `POST /rest/api/content` with Data Center format
-- `updatePage` → `PUT /rest/api/content/{id}` with version conflict handling
+**Key Mapping Notes** (per tool reference):
+- `searchPages` → `GET /wiki/rest/api/content/search` with CQL filters (Sprint 2)
+- `getPageContent` → `GET /wiki/rest/api/content/{id}?expand=body.storage,version,space,ancestors,children.page`
+- `getSpaces` → `GET /wiki/rest/api/space?expand=description,homepage,permissions` with offset pagination  
+- `createPage` → `POST /wiki/rest/api/content` with hierarchical ancestors support
+- `updatePage` → `PUT /wiki/rest/api/content/{id}` with enhanced version conflict handling
+- `deletePage` → `DELETE /wiki/rest/api/content/{id}?status=trashed` for soft delete
 
 ## Content Format Handling
 
