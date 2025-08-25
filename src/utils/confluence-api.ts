@@ -52,12 +52,12 @@ export class ConfluenceDataCenterApiClient {
     // Remove trailing slash
     let normalized = baseUrl.replace(/\/$/, '');
     
-    // Add /confluence if not present (common Data Center deployment pattern)
-    if (!normalized.includes('/confluence')) {
-      normalized += '/confluence';
+    // Check if URL already includes /rest/api (direct API access)
+    if (normalized.includes('/rest/api')) {
+      return normalized;
     }
     
-    // Add REST API path
+    // Add /rest/api directly (for URLs like https://wiki.workers-hub.com)
     if (!normalized.endsWith('/rest/api')) {
       normalized += '/rest/api';
     }

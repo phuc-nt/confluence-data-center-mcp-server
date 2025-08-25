@@ -59,64 +59,71 @@ export async function executeGetPageContent(
     // API call with comprehensive expand per tool reference section 1.2
     const response = await client.get(`/content/${params.pageId}?expand=${expandQuery}`);
 
-    // Return response structure per tool reference section 1.2
+    // Debug log to see actual response
+    console.log('API Response:', JSON.stringify(response, null, 2));
+
+    // Return response structure per tool reference section 1.2 with safe property access
     return {
       success: true,
       page: {
-        id: response.id,
-        type: response.type,
-        title: response.title,
-        space: {
-          id: response.space?.id,
-          key: response.space?.key,
-          name: response.space?.name,
-          _links: response.space?._links
-        },
-        body: {
-          storage: response.body?.storage ? {
-            value: response.body.storage.value,
-            representation: response.body.storage.representation
-          } : undefined,
-          view: response.body?.view ? {
-            value: response.body.view.value,
-            representation: response.body.view.representation
-          } : undefined,
-          export_view: response.body?.export_view ? {
-            value: response.body.export_view.value,
-            representation: response.body.export_view.representation
-          } : undefined
-        },
-        version: {
-          number: response.version?.number,
-          by: {
-            type: response.version?.by?.type,
-            accountId: response.version?.by?.accountId || response.version?.by?.username,
-            displayName: response.version?.by?.displayName
-          },
-          when: response.version?.when,
-          message: response.version?.message || ''
-        },
-        ancestors: response.ancestors?.map((ancestor: any) => ({
-          id: ancestor.id,
-          title: ancestor.title
-        })) || [],
-        children: response.children?.page ? {
-          results: response.children.page.results?.map((child: any) => ({
-            id: child.id,
-            title: child.title
-          })) || []
-        } : undefined,
-        descendants: response.descendants?.comment ? {
+        id: response.id || '',
+        type: response.type || '',
+        title: response.title || '',
+        space: response.space ? {
+          id: response.space.id,
+          key: response.space.key,
+          name: response.space.name,
+          _links: response.space._links || {}
+        } : null,
+        body: response.body ? {
+          storage: response.body.storage ? {
+            value: response.body.storage.value || '',
+            representation: response.body.storage.representation || 'storage'
+          } : null,
+          view: response.body.view ? {
+            value: response.body.view.value || '',
+            representation: response.body.view.representation || 'view'
+          } : null,
+          export_view: response.body.export_view ? {
+            value: response.body.export_view.value || '',
+            representation: response.body.export_view.representation || 'export_view'
+          } : null
+        } : null,
+        version: response.version ? {
+          number: response.version.number || 1,
+          by: response.version.by ? {
+            type: response.version.by.type || 'unknown',
+            accountId: response.version.by.accountId || response.version.by.username || '',
+            displayName: response.version.by.displayName || ''
+          } : null,
+          when: response.version.when || '',
+          message: response.version.message || ''
+        } : null,
+        ancestors: (response.ancestors && Array.isArray(response.ancestors)) ? 
+          response.ancestors.map((ancestor: any) => ({
+            id: ancestor.id || '',
+            title: ancestor.title || ''
+          })) : [],
+        children: (response.children && response.children.page && response.children.page.results) ? {
+          results: response.children.page.results.map((child: any) => ({
+            id: child.id || '',
+            title: child.title || ''
+          }))
+        } : null,
+        descendants: (response.descendants && response.descendants.comment) ? {
           results: response.descendants.comment.results || []
-        } : undefined,
-        _links: {
-          webui: response._links?.webui,
-          self: response._links?.self
-        }
+        } : null,
+        _links: response._links ? {
+          webui: response._links.webui || '',
+          self: response._links.self || ''
+        } : {}
       }
     };
   } catch (error: any) {
     // Enhanced error handling per tool reference
+    console.error('Error in getPageContent:', error.message);
+    console.error('Error response:', error.response?.data);
+    
     if (error.response?.status === 401) {
       throw new Error('Authentication failed. Check Personal Access Token.');
     }
