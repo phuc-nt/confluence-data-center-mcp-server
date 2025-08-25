@@ -20,8 +20,7 @@ import { validateEnvironment } from './utils/error-handler.js';
 import { healthCheck } from './tools/health-check.js';
 import { connectionTest } from './tools/connection-test.js';
 import { initializeServerContext } from './utils/server-context.js';
-import { getConfluenceTools } from './tools/confluence/index.js';
-import { executeCreatePage } from './tools/confluence/create-page.js';
+import { getConfluenceTools, registerConfluenceTools } from './tools/confluence/index.js';
 
 // Load environment variables
 dotenv.config();
@@ -115,32 +114,70 @@ async function main() {
       };
     });
 
+    // Setup unified tool handler
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
       logger.info(`Tool called: ${request.params.name}`);
       
       try {
+        // Handle system tools
         switch (request.params.name) {
           case 'health-check':
             return await healthCheck(request.params.arguments as any);
           
           case 'connection-test':
             return await connectionTest(request.params.arguments as any);
-
-          case 'createPage':
-            const result = await executeCreatePage(request.params.arguments as any, serverContext.confluenceApi);
-            return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
-          
-          default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Tool ${request.params.name} not implemented yet`
-            );
         }
+        
+        // Handle confluence tools
+        const confluenceTools = ['createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces'];
+        if (confluenceTools.includes(request.params.name)) {
+          // Delegate to confluence tools handler logic
+          const { executeCreatePage } = await import('./tools/confluence/create-page.js');
+          const { executeGetPageContent } = await import('./tools/confluence/get-page-content.js');
+          const { executeUpdatePage } = await import('./tools/confluence/update-page.js');
+          const { executeSearchPages } = await import('./tools/confluence/search-pages.js');
+          const { executeGetSpaces } = await import('./tools/confluence/get-spaces.js');
+          
+          let result;
+          switch (request.params.name) {
+            case 'createPage':
+              result = await executeCreatePage(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'getPageContent':
+              result = await executeGetPageContent(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'updatePage':
+              result = await executeUpdatePage(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'searchPages':
+              result = await executeSearchPages(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'getSpaces':
+              result = await executeGetSpaces(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+          }
+          
+          return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+        }
+        
+        throw new McpError(
+          ErrorCode.MethodNotFound,
+          `Tool ${request.params.name} not found`
+        );
       } catch (error) {
         logger.error(`Error in tool ${request.params.name}:`, error);
         
         if (error instanceof McpError) {
           throw error;
+        }
+        
+        // Handle confluence tool errors with success: false format
+        const confluenceTools = ['createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces'];
+        if (confluenceTools.includes(request.params.name)) {
+          return { 
+            content: [{ type: 'text', text: JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2) }],
+            isError: true
+          };
         }
         
         throw new McpError(

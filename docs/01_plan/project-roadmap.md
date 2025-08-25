@@ -29,31 +29,32 @@
 
 ## Phase-Based Development Strategy
 
-### Phase 1: Foundation & Page Management (Sprint 1)
+### Phase 1: Foundation & Content Management (Sprint 1)
 **Duration**: 8 working days  
-**Goal**: Core page operations and Data Center server infrastructure
+**Goal**: Core page operations, search capabilities, and Data Center server infrastructure
 
-#### Sprint 1: Page Management Complete (8MD)
+#### Sprint 1: Core Content Management Complete (8MD)
 - Project initialization and MCP server setup
 - Confluence Data Center API client integration  
 - Personal Access Token authentication
-- Complete page management: createPage, getPageContent, updatePage, deletePage
+- Complete page management: createPage, getPageContent, updatePage
+- Universal search: searchPages with advanced CQL filtering
 - Space discovery: getSpaces for context and navigation
 - SSL certificate handling for enterprise environments
 
-**Milestone 1**: Complete page management functional (5 tools)
+**Milestone 1**: Complete content management functional (5 tools)
 
-### Phase 2: Search & Discovery (Sprint 2)  
+### Phase 2: Advanced Features (Sprint 2)  
 **Duration**: 7 working days  
-**Goal**: Search capabilities and metadata access
+**Goal**: Version tracking and enhanced page management
 
-#### Sprint 2: Search & Discovery (7MD)
-- Universal page search: searchPages with CQL filtering
+#### Sprint 2: Advanced Page Features (7MD)
 - Page version history: getPageVersions for change tracking
+- Page deletion: deletePage with soft/hard delete options
 - Error handling standardization across all tools
-- Integration testing for all page and search tools
+- Integration testing for all advanced page tools
 
-**Milestone 2**: Search and discovery complete (7 tools total)
+**Milestone 2**: Advanced page management complete (7 tools total)
 
 ### Phase 3: Comments & Production (Sprint 3)
 **Duration**: 5 working days  
@@ -70,15 +71,15 @@
 ## Tool Distribution Strategy
 
 ### Development Priority
-1. **Page Management** (5 tools) - Critical
-   - createPage, getPageContent, updatePage, deletePage, getSpaces
-   - Core functionality for content creation and space discovery
+1. **Core Content Management** (5 tools) - Critical
+   - createPage, getPageContent, updatePage, searchPages, getSpaces
+   - Core functionality for content creation, discovery, and space navigation
    - Foundation for all workflows and AI content operations
 
-2. **Search & Discovery** (2 tools) - High
-   - searchPages, getPageVersions
-   - Enhanced content discovery with CQL
-   - Version tracking capabilities
+2. **Advanced Page Features** (2 tools) - High
+   - getPageVersions, deletePage
+   - Enhanced page management with version tracking and deletion
+   - Advanced workflow capabilities
 
 3. **Comment System** (4 tools) - Medium
    - getPageComments, addComment, updateComment, deleteComment
@@ -88,8 +89,8 @@
 ### Single Server Configuration
 | Component | Tools | Priority | Sprint | Duration |
 |-----------|-------|----------|---------|----------|
-| **Page Management** | 5 tools | Critical | Sprint 1 | 8MD |
-| **Search & Discovery** | +2 tools (7 total) | High | Sprint 2 | 7MD |
+| **Core Content Management** | 5 tools | Critical | Sprint 1 | 8MD |
+| **Advanced Page Features** | +2 tools (7 total) | High | Sprint 2 | 7MD |
 | **Comment System** | +4 tools (11 total) | Medium | Sprint 3 | 5MD |
 | **Production** | Complete server | Ready | Sprint 3 | **Total: 20MD** |
 
@@ -98,26 +99,26 @@
 ### Sprint 1 (8 working days)
 ```mermaid
 gantt
-    title Sprint 1: Foundation & Page Management (8MD)
+    title Sprint 1: Foundation & Content Management (8MD)
     section Setup (3MD)
-    Project Init           :active, 1d
-    MCP Infrastructure     :1d
-    API Client Setup       :1d
-    section Page Tools (5MD)
-    PAT Authentication     :1d
-    createPage            :1d
-    getPageContent        :1d  
-    updatePage            :1d
-    deletePage + getSpaces :1d
+    Project Init           :done, 1d
+    MCP Infrastructure     :done, 1d
+    API Client Setup       :done, 1d
+    section Core Tools (5MD)
+    PAT Authentication     :done, 1d
+    createPage            :done, 1d
+    getPageContent        :done, 1d  
+    updatePage            :done, 1d
+    searchPages + getSpaces :1d
 ```
 
 ### Sprint 2 (7 working days)  
 ```mermaid
 gantt
-    title Sprint 2: Search & Discovery (7MD)
-    section Search Tools (4MD)
-    searchPages           :2d
+    title Sprint 2: Advanced Page Features (7MD)
+    section Advanced Tools (4MD)
     getPageVersions       :2d
+    deletePage           :2d
     section Infrastructure (3MD)
     Error Handling        :2d
     Integration Testing   :1d
@@ -159,15 +160,16 @@ gantt
 ### Sprint 1 Success Criteria
 - MCP server connects successfully to Data Center instance
 - Personal Access Token authentication working
-- 5 page management tools operational: createPage, getPageContent, updatePage, deletePage, getSpaces
+- 5 core content management tools operational: createPage, getPageContent, updatePage, searchPages, getSpaces
 - Complete page CRUD operations validated with real API
+- Universal search with CQL filtering functional
 - Basic error handling implemented
 - SSL certificate handling functional
 
 ### Sprint 2 Success Criteria
-- 7 tools total (Page Management + Search & Discovery)
-- Universal page search working: searchPages with CQL
-- Page version history access: getPageVersions  
+- 7 tools total (Core Content Management + Advanced Features)
+- Page version history access: getPageVersions working
+- Page deletion with soft/hard delete: deletePage functional
 - Error handling standardized across all tools
 - Integration testing complete
 
@@ -197,8 +199,8 @@ gantt
 ## Resource Allocation
 
 ### Development Focus Distribution
-- **45%** - Page management (5 tools: createPage, getPageContent, updatePage, deletePage, getSpaces)
-- **20%** - Search & discovery (2 tools: searchPages, getPageVersions)
+- **45%** - Core content management (5 tools: createPage, getPageContent, updatePage, searchPages, getSpaces)
+- **20%** - Advanced page features (2 tools: getPageVersions, deletePage)
 - **25%** - Comment system (4 tools: getPageComments, addComment, updateComment, deleteComment)  
 - **10%** - Infrastructure & integration
 
@@ -218,5 +220,5 @@ gantt
 ---
 
 **Project Status**: Planning Complete - Ready for Implementation  
-**Next Milestone**: Sprint 1 completion - Complete page management functional (5 tools)  
+**Next Milestone**: Sprint 1 completion - Complete content management functional (5 tools)  
 **Timeline**: 20 working days total delivery
