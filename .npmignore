@@ -1,0 +1,47 @@
+# Source code (only publish built files)
+src/
+tsconfig.json
+.env*
+
+# Development files
+node_modules/
+build/
+venv/
+.DS_Store
+*.log
+npm-debug.log*
+
+# Documentation that should not be published
+docs/
+sample/
+CLAUDE.md
+
+# Git and development
+.git/
+.gitignore
+.github/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing and coverage
+coverage/
+.nyc_output/
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+.tmp/

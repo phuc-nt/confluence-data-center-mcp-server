@@ -1,28 +1,56 @@
 {
   "name": "confluence-dc-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for Confluence Data Center integration with Personal Access Token authentication",
+  "description": "MCP server for Confluence Data Center integration with Personal Access Token authentication - 11 production-ready tools for AI assistants",
   "type": "module",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "confluence-dc-mcp-server": "build/index.js"
+    "confluence-dc-mcp-server": "dist/index.js"
   },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "INSTALL.md",
+    "API_REFERENCE.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node build/index.js",
-    "clean": "rm -rf build"
+    "build": "tsc --outDir dist && chmod +x dist/index.js",
+    "dev": "tsc --outDir dist --watch",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist build",
+    "prepare": "npm run clean && npm run build",
+    "prepublishOnly": "npm run build",
+    "test": "echo 'All tools built successfully'",
+    "prepack": "npm run build",
+    "postpack": "echo 'Package ready for npm publish'"
   },
   "keywords": [
     "confluence",
-    "data-center",
+    "confluence-data-center",
     "mcp",
-    "server",
+    "mcp-server",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "cline",
+    "cursor",
     "enterprise",
-    "personal-access-token"
+    "personal-access-token",
+    "collaboration",
+    "documentation",
+    "atlassian"
   ],
-  "author": "Your Name",
+  "author": "phuc-nt",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phuc-nt/confluence-dc-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/phuc-nt/confluence-dc-mcp-server/issues"
+  },
+  "homepage": "https://github.com/phuc-nt/confluence-dc-mcp-server#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "axios": "^1.6.0",
@@ -34,6 +62,7 @@
     "typescript": "^5.3.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }

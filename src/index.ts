@@ -128,8 +128,15 @@ async function main() {
             return await connectionTest(request.params.arguments as any);
         }
         
-        // Handle confluence tools
-        const confluenceTools = ['createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces'];
+        // Handle confluence tools - All 11 tools
+        const confluenceTools = [
+          // Sprint 1: Core Content Management
+          'createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces',
+          // Sprint 2: Advanced Page Features  
+          'getPageVersions', 'deletePage',
+          // Sprint 3: Comment System
+          'getPageComments', 'addComment', 'updateComment', 'deleteComment'
+        ];
         if (confluenceTools.includes(request.params.name)) {
           // Delegate to confluence tools handler logic
           const { executeCreatePage } = await import('./tools/confluence/create-page.js');
@@ -137,6 +144,12 @@ async function main() {
           const { executeUpdatePage } = await import('./tools/confluence/update-page.js');
           const { executeSearchPages } = await import('./tools/confluence/search-pages.js');
           const { executeGetSpaces } = await import('./tools/confluence/get-spaces.js');
+          const { executeGetPageVersions } = await import('./tools/confluence/get-page-versions.js');
+          const { executeDeletePage } = await import('./tools/confluence/delete-page.js');
+          const { executeGetPageComments } = await import('./tools/confluence/get-page-comments.js');
+          const { executeAddComment } = await import('./tools/confluence/add-comment.js');
+          const { executeUpdateComment } = await import('./tools/confluence/update-comment.js');
+          const { executeDeleteComment } = await import('./tools/confluence/delete-comment.js');
           
           let result;
           switch (request.params.name) {
@@ -155,6 +168,24 @@ async function main() {
             case 'getSpaces':
               result = await executeGetSpaces(request.params.arguments as any, serverContext.confluenceApi);
               break;
+            case 'getPageVersions':
+              result = await executeGetPageVersions(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'deletePage':
+              result = await executeDeletePage(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'getPageComments':
+              result = await executeGetPageComments(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'addComment':
+              result = await executeAddComment(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'updateComment':
+              result = await executeUpdateComment(request.params.arguments as any, serverContext.confluenceApi);
+              break;
+            case 'deleteComment':
+              result = await executeDeleteComment(request.params.arguments as any, serverContext.confluenceApi);
+              break;
           }
           
           return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
@@ -171,8 +202,11 @@ async function main() {
           throw error;
         }
         
-        // Handle confluence tool errors with success: false format
-        const confluenceTools = ['createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces'];
+        // Handle confluence tool errors with success: false format - All 11 tools
+        const confluenceTools = [
+          'createPage', 'getPageContent', 'updatePage', 'searchPages', 'getSpaces',
+          'getPageVersions', 'deletePage', 'getPageComments', 'addComment', 'updateComment', 'deleteComment'
+        ];
         if (confluenceTools.includes(request.params.name)) {
           return { 
             content: [{ type: 'text', text: JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }, null, 2) }],
