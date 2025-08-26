@@ -11,9 +11,19 @@
 
 ## Installation Methods
 
-### 🔧 Method 1: Installation from Source (Recommended)
+### 🚀 Method 1: NPM Installation (Recommended)
 
-**For production deployment and customization:**
+**Quick install from npm registry:**
+
+```bash
+npm install -g confluence-dc-mcp-server
+```
+
+**That's it!** The binary will be available globally. Continue to [Step 2: Get Confluence Personal Access Token](#step-2-get-confluence-personal-access-token) below.
+
+### 🔧 Method 2: Installation from Source
+
+**For development or customization:**
 
 #### Prerequisites Check
 
@@ -44,7 +54,7 @@ npm install
 npm run build
 ```
 
-**That's it!** The server is now ready at `dist/index.js`. Continue to [Step 2: Get Confluence Personal Access Token](#step-2-get-confluence-personal-access-token) below.
+**The server is ready at `dist/index.js`.**
 
 ## Step 2: Get Confluence Personal Access Token
 
@@ -106,7 +116,27 @@ Make sure your account has these Confluence permissions:
 
 ### 🔧 Complete Confluence Data Center Integration
 
-**Recommended configuration with all 11 tools:**
+**Recommended configuration with all 11 tools (NPM Installation):**
+
+```json
+{
+  "mcpServers": {
+    "confluence-dc": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "node",
+      "args": ["/opt/homebrew/bin/confluence-dc-mcp-server"],
+      "env": {
+        "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
+        "CONFLUENCE_PAT": "your-personal-access-token"
+      }
+    }
+  }
+}
+```
+
+**For source installation:**
 
 ```json
 {
@@ -151,6 +181,29 @@ This server works with all major MCP clients:
 
 ### Find Your Installation Path 
 
+**After NPM installation:**
+
+```bash
+which confluence-dc-mcp-server
+```
+
+**Expected paths by OS:**
+
+**macOS (Homebrew Node):**
+```json
+"args": ["/opt/homebrew/bin/confluence-dc-mcp-server"]
+```
+
+**macOS/Linux (System Node):**
+```json
+"args": ["/usr/local/bin/confluence-dc-mcp-server"]
+```
+
+**Windows:**
+```json
+"args": ["C:\\Users\\YourName\\AppData\\Roaming\\npm\\confluence-dc-mcp-server.cmd"]
+```
+
 **After building from source:**
 
 Get the absolute path to your installation:
@@ -164,18 +217,6 @@ pwd
 Use this path in your configuration:
 ```json
 "args": ["/Users/username/confluence-dc-mcp-server/dist/index.js"]
-```
-
-**Example configurations by OS:**
-
-**macOS/Linux:**
-```json
-"args": ["/Users/username/confluence-dc-mcp-server/dist/index.js"]
-```
-
-**Windows:**
-```json
-"args": ["C:\\Users\\Username\\confluence-dc-mcp-server\\dist\\index.js"]
 ```
 
 ## Step 4: Environment Configuration

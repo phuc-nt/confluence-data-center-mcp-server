@@ -44,18 +44,15 @@
 
 ## 🚀 Quick Start
 
-### 📦 Install from Source
+### 📦 Install from NPM (Recommended)
 
 ```bash
-git clone https://github.com/phuc-nt/confluence-dc-mcp-server.git
-cd confluence-dc-mcp-server
-npm install
-npm run build
+npm install -g confluence-dc-mcp-server
 ```
 
 ### ⚙️ Quick Configuration
 
-**Add to your MCP client configuration (Recommended format):**
+**Add to your MCP client configuration:**
 
 ```json
 {
@@ -65,7 +62,7 @@ npm run build
       "timeout": 60,
       "type": "stdio",
       "command": "node",
-      "args": ["/path/to/confluence-dc-mcp-server/dist/index.js"],
+      "args": ["/opt/homebrew/bin/confluence-dc-mcp-server"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
         "CONFLUENCE_PAT": "your-personal-access-token"
@@ -73,6 +70,20 @@ npm run build
     }
   }
 }
+```
+
+> **💡 Find your installation path:** Use `which confluence-dc-mcp-server` to locate the binary
+
+### 📦 Alternative: Install from Source
+
+For development or customization:
+
+```bash
+git clone https://github.com/phuc-nt/confluence-dc-mcp-server.git
+cd confluence-dc-mcp-server
+npm install
+npm run build
+# Use: /path/to/confluence-dc-mcp-server/dist/index.js
 ```
 
 > **💡 Why node+args format?** This format provides universal compatibility across all MCP clients and platforms, avoiding potential executable detection issues.
