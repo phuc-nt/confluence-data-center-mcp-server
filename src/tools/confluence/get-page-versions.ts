@@ -4,7 +4,7 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const getPageVersionsTool: Tool = {
   name: 'getPageVersions',
-  description: 'Complete version history for change tracking and rollback per tool reference',
+  description: 'Get complete version history of a page. Use valid pageId from getPageContent or searchPages results.',
   inputSchema: {
     type: 'object',
     properties: {

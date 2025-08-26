@@ -4,7 +4,7 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const searchPagesTool: Tool = {
   name: 'searchPages',
-  description: 'Universal content discovery with advanced CQL filtering per tool reference',
+  description: 'Universal content discovery with CQL queries. Uses /rest/api/content/search endpoint for advanced CQL filtering.',
   inputSchema: {
     type: 'object',
     properties: {
