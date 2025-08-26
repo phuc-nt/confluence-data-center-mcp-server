@@ -39,8 +39,8 @@ export async function executeGetPageVersions(
     const start = params.start || 0;
     const limit = Math.min(params.limit || 25, 200);
 
-    // API call per tool reference section 2.2
-    const response = await client.get(`/content/${params.pageId}/version?start=${start}&limit=${limit}`);
+    // API call per tool reference section 2.2 - using correct /history endpoint
+    const response = await client.get(`/content/${params.pageId}/history?start=${start}&limit=${limit}`);
 
     // Debug log to see actual response
     console.log('getPageVersions API Response:', JSON.stringify(response, null, 2));

@@ -4,23 +4,18 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const deletePageTool: Tool = {
   name: 'deletePage',
-  description: 'Page removal with options for soft/hard delete per tool reference',
+  description: 'Permanent page deletion (admin permissions required). Note: Data Center version performs permanent deletion only.',
   inputSchema: {
     type: 'object',
     properties: {
       pageId: {
         type: 'string',
-        description: 'Required: Page ID to delete'
-      },
-      status: {
-        type: 'string',
-        description: 'Delete type: "trashed" for soft delete (recoverable), omit for permanent delete (admin only)',
-        enum: ['trashed']
+        description: 'Required: Page ID to delete permanently'
       }
     },
     required: ['pageId']
   }
-};
+};;
 
 export async function executeDeletePage(
   params: {
@@ -31,14 +26,10 @@ export async function executeDeletePage(
 ): Promise<any> {
   try {
     // Build API endpoint per tool reference section 1.4
+    // Note: Data Center may not support status=trashed parameter
     let endpoint = `/content/${params.pageId}`;
-    
-    // Add status parameter for soft delete
-    if (params.status === 'trashed') {
-      endpoint += '?status=trashed';
-    }
 
-    // API call per tool reference section 1.4
+    // API call per tool reference section 1.4 - permanent delete only
     const response = await client.delete(endpoint);
 
     // Debug log to see actual response
@@ -49,7 +40,7 @@ export async function executeDeletePage(
       success: true,
       page: {
         id: response.id || params.pageId,
-        status: params.status === 'trashed' ? 'trashed' : 'deleted',
+        status: 'deleted',
         title: response.title || '',
         version: response.version ? {
           number: response.version.number || 0,
@@ -62,8 +53,8 @@ export async function executeDeletePage(
           self: response._links.self || ''
         } : {}
       },
-      deleteType: params.status === 'trashed' ? 'soft' : 'permanent',
-      recoverable: params.status === 'trashed'
+      deleteType: 'permanent',
+      recoverable: false
     };
   } catch (error: any) {
     // Enhanced error handling per tool reference
@@ -75,8 +66,7 @@ export async function executeDeletePage(
     }
     
     if (error.response?.status === 403) {
-      const deleteType = params.status === 'trashed' ? 'soft delete' : 'permanent delete';
-      throw new Error(`Insufficient permissions for ${deleteType} of page "${params.pageId}". Check page permissions and admin rights.`);
+      throw new Error(`Insufficient permissions to delete page "${params.pageId}". Check page permissions and admin rights.`);
     }
     
     if (error.response?.status === 404) {

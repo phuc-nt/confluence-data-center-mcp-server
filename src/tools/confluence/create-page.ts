@@ -10,7 +10,7 @@ export const createPageTool: Tool = {
     properties: {
       spaceKey: {
         type: 'string',
-        description: 'Required: Space key (string format, e.g., "DEV", "PROJ")'
+        description: 'Required: Space key in lowercase (e.g., "dev", "proj")'
       },
       title: {
         type: 'string',
@@ -27,7 +27,7 @@ export const createPageTool: Tool = {
     },
     required: ['spaceKey', 'title', 'content']
   }
-};
+};;
 
 export async function executeCreatePage(
   params: {
@@ -39,9 +39,9 @@ export async function executeCreatePage(
   client: ConfluenceDataCenterApiClient
 ): Promise<any> {
   try {
-    // Validate spaceKey format (alphanumeric only)
-    if (!/^[A-Z0-9]+$/.test(params.spaceKey)) {
-      throw new Error('Invalid spaceKey format. Must be alphanumeric (e.g., "DEV", "PROJ")');
+    // Validate spaceKey format (alphanumeric only, case insensitive)
+    if (!/^[a-zA-Z0-9]+$/.test(params.spaceKey)) {
+      throw new Error('Invalid spaceKey format. Must be alphanumeric (e.g., "dev", "proj")');
     }
 
     // Build request body according to Data Center API v1 format per tool reference
