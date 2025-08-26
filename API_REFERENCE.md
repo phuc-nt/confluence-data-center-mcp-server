@@ -674,7 +674,7 @@ All tools implement comprehensive error handling with specific error codes and m
 
 **Required:**
 - `CONFLUENCE_BASE_URL`: Your Confluence Data Center base URL
-- `CONFLUENCE_PAT`: Personal Access Token for authentication
+- `CONFLUENCE_PERSONAL_ACCESS_TOKEN`: Personal Access Token for authentication
 
 **Optional:**
 - `MCP_SERVER_NAME`: Custom server name (default: "confluence-dc-mcp-server")
@@ -693,7 +693,7 @@ All tools implement comprehensive error handling with specific error codes and m
       "args": ["/path/to/confluence-dc-mcp-server/dist/index.js"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
-        "CONFLUENCE_PAT": "your-personal-access-token"
+        "CONFLUENCE_PERSONAL_ACCESS_TOKEN": "your-personal-access-token"
       }
     }
   }

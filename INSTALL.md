@@ -129,7 +129,7 @@ Make sure your account has these Confluence permissions:
       "args": ["/opt/homebrew/bin/confluence-dc-mcp-server"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
-        "CONFLUENCE_PAT": "your-personal-access-token"
+        "CONFLUENCE_PERSONAL_ACCESS_TOKEN": "your-personal-access-token"
       }
     }
   }
@@ -149,7 +149,7 @@ Make sure your account has these Confluence permissions:
       "args": ["/full/path/to/confluence-dc-mcp-server/dist/index.js"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
-        "CONFLUENCE_PAT": "your-personal-access-token"
+        "CONFLUENCE_PERSONAL_ACCESS_TOKEN": "your-personal-access-token"
       }
     }
   }
@@ -163,7 +163,7 @@ Make sure your account has these Confluence permissions:
 **Required Environment Variables:**
 
 - `CONFLUENCE_BASE_URL`: Your Confluence Data Center base URL (e.g., `https://confluence.company.com` or `https://confluence.company.com/confluence`)
-- `CONFLUENCE_PAT`: Your Personal Access Token from step 2
+- `CONFLUENCE_PERSONAL_ACCESS_TOKEN`: Your Personal Access Token from step 2
 
 **Optional Environment Variables:**
 

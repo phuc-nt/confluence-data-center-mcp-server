@@ -65,7 +65,7 @@ npm install -g confluence-dc-mcp-server
       "args": ["/opt/homebrew/bin/confluence-dc-mcp-server"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
-        "CONFLUENCE_PAT": "your-personal-access-token"
+        "CONFLUENCE_PERSONAL_ACCESS_TOKEN": "your-personal-access-token"
       }
     }
   }

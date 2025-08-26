@@ -109,7 +109,7 @@ npm run build
       "args": ["/path/to/confluence-dc-mcp-server/dist/index.js"],
       "env": {
         "CONFLUENCE_BASE_URL": "https://your-confluence-dc.company.com",
-        "CONFLUENCE_PAT": "your-personal-access-token"
+        "CONFLUENCE_PERSONAL_ACCESS_TOKEN": "your-personal-access-token"
       }
     }
   }
