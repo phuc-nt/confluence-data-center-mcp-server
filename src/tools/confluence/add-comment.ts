@@ -38,7 +38,8 @@ export async function executeAddComment(
     const requestBody: any = {
       type: 'comment',
       container: {
-        id: params.pageId
+        id: params.pageId,
+        type: 'page'  // Fix: Add required type field
       },
       body: {
         storage: {
@@ -88,6 +89,7 @@ export async function executeAddComment(
         } : null,
         container: response.container ? {
           id: response.container.id || params.pageId,
+          type: response.container.type || 'page',
           title: response.container.title || ''
         } : null,
         ancestors: (response.ancestors && Array.isArray(response.ancestors)) ?
