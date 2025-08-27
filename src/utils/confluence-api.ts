@@ -162,7 +162,33 @@ export class ConfluenceDataCenterApiClient {
   /**
    * Make a GET request to the Confluence API
    */
+  /**
+   * Make a GET request to the Confluence API
+   */
   async get<T = any>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    // Handle experimental endpoints by adjusting the base URL temporarily
+    if (endpoint.startsWith('/experimental/')) {
+      const experimentalBaseUrl = this.config.baseUrl.replace(/\/$/, '') + '/rest';
+      const experimentalClient = axios.create({
+        baseURL: experimentalBaseUrl,
+        timeout: 30000,
+        headers: {
+          'Authorization': `Bearer ${this.config.personalAccessToken}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'User-Agent': 'confluence-dc-mcp-server/1.0.0'
+        },
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: this.config.verifySSL
+        })
+      });
+      
+      logger.debug(`Experimental API Request: GET ${experimentalBaseUrl}${endpoint}`);
+      const response = await experimentalClient.get(endpoint, { params });
+      return response.data;
+    }
+    
+    // Standard API requests
     const response = await this.httpClient.get(endpoint, { params });
     return response.data;
   }
