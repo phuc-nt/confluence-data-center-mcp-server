@@ -1,7 +1,7 @@
 {
   "name": "confluence-dc-mcp-server",
-  "version": "1.0.0",
-  "description": "MCP server for Confluence Data Center integration with Personal Access Token authentication - 11 production-ready tools for AI assistants",
+  "version": "1.1.0",
+  "description": "Production-validated MCP server for Confluence Data Center - 11 AI-tested tools with enhanced version management and complete API compatibility",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
