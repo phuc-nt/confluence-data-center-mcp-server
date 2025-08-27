@@ -4,13 +4,17 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const getPageContentTool: Tool = {
   name: 'getPageContent',
-  description: 'Retrieve complete page data with comprehensive expansion per tool reference',
+  description: 'Retrieve page content (current or historical version). WORKFLOW: 1) Use getPageVersions to get version numbers 2) Use versionNumber parameter to get historical content 3) Omit versionNumber for current version',
   inputSchema: {
     type: 'object',
     properties: {
       pageId: {
         type: 'string',
         description: 'Required: Page ID to retrieve'
+      },
+      versionNumber: {
+        type: 'number',
+        description: 'Optional: Specific version number to retrieve (from getPageVersions). Omit for current version.'
       },
       expand: {
         type: 'array',
@@ -33,11 +37,12 @@ export const getPageContentTool: Tool = {
     },
     required: ['pageId']
   }
-};
+};;
 
 export async function executeGetPageContent(
   params: {
     pageId: string;
+    versionNumber?: number;
     expand?: string[];
   },
   client: ConfluenceDataCenterApiClient
@@ -56,8 +61,16 @@ export async function executeGetPageContent(
     const expandParams = params.expand || defaultExpand;
     const expandQuery = expandParams.join(',');
 
+    // Build URL based on whether version is specified
+    let url = `/content/${params.pageId}?expand=${expandQuery}`;
+    
+    // Add historical version parameters if specified
+    if (params.versionNumber) {
+      url = `/content/${params.pageId}?status=historical&version=${params.versionNumber}&expand=${expandQuery}`;
+    }
+
     // API call with comprehensive expand per tool reference section 1.2
-    const response = await client.get(`/content/${params.pageId}?expand=${expandQuery}`);
+    const response = await client.get(url);
 
     // Debug log to see actual response
     console.log('API Response:', JSON.stringify(response, null, 2));
@@ -116,7 +129,10 @@ export async function executeGetPageContent(
         _links: response._links ? {
           webui: response._links.webui || '',
           self: response._links.self || ''
-        } : {}
+        } : {},
+        // Add version info to help with workflow
+        isHistorical: !!params.versionNumber,
+        requestedVersion: params.versionNumber || null
       }
     };
   } catch (error: any) {
@@ -133,11 +149,17 @@ export async function executeGetPageContent(
     }
     
     if (error.response?.status === 404) {
+      if (params.versionNumber) {
+        throw new Error(`Page "${params.pageId}" version ${params.versionNumber} not found or not accessible.`);
+      }
       throw new Error(`Page "${params.pageId}" not found or not accessible.`);
     }
     
     if (error.response?.status === 400) {
       const errorData = error.response?.data;
+      if (params.versionNumber && errorData?.message?.includes('version')) {
+        throw new Error(`Invalid version number "${params.versionNumber}" for page "${params.pageId}". Use getPageVersions to get valid version numbers.`);
+      }
       throw new Error(`Invalid request: ${errorData?.message || 'Bad request - check pageId format'}`);
     }
 

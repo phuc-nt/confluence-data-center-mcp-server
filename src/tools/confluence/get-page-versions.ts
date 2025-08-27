@@ -4,7 +4,7 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const getPageVersionsTool: Tool = {
   name: 'getPageVersions',
-  description: 'Get complete version history of a page. Use valid pageId from getPageContent or searchPages results.',
+  description: 'Get complete version history of a page with links to access historical content. Use with getPageContent(versionNumber) to retrieve specific version content.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -25,7 +25,7 @@ export const getPageVersionsTool: Tool = {
     },
     required: ['pageId']
   }
-};
+};;
 
 export async function executeGetPageVersions(
   params: {
@@ -39,13 +39,13 @@ export async function executeGetPageVersions(
     const start = params.start || 0;
     const limit = Math.min(params.limit || 25, 200);
 
-    // API call per tool reference section 2.2 - using correct /history endpoint
-    const response = await client.get(`/content/${params.pageId}/history?start=${start}&limit=${limit}`);
+    // Using experimental endpoint for complete version history access
+    const response = await client.get(`/experimental/content/${params.pageId}/version?start=${start}&limit=${limit}`);
 
     // Debug log to see actual response
     console.log('getPageVersions API Response:', JSON.stringify(response, null, 2));
 
-    // Return response structure per tool reference section 2.2
+    // Return response structure with enhanced version data
     return {
       success: true,
       versions: (response.results && Array.isArray(response.results)) ?
@@ -63,8 +63,11 @@ export async function executeGetPageVersions(
           message: version.message || '',
           minorEdit: version.minorEdit || false,
           _links: version._links ? {
-            self: version._links.self || ''
-          } : {}
+            self: version._links.self || '',
+            content: `/rest/api/content/${params.pageId}?status=historical&version=${version.number}&expand=body.storage`
+          } : {
+            content: `/rest/api/content/${params.pageId}?status=historical&version=${version.number}&expand=body.storage`
+          }
         })) : [],
       pagination: {
         start: response.start || start,

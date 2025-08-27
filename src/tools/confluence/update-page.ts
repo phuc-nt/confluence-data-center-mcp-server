@@ -4,7 +4,7 @@ import { handleConfluenceError } from '../../utils/error-handler.js';
 
 export const updatePageTool: Tool = {
   name: 'updatePage',
-  description: 'Update Confluence page with automatic version management. WORKFLOW: 1) Use getPageContent to get current version 2) Add +1 to current version for versionNumber 3) Ensure spaceKey is lowercase (e.g. "tbvp" not "TBVP") 4) Use storage format for content.',
+  description: 'Update Confluence page with version management. WORKFLOW: 1) Use getPageContent to get current version 2) Add +1 to current version for versionNumber 3) Ensure spaceKey is lowercase 4) Use storage format for content. For version comparison: use getPageVersions + getPageContent(versionNumber) to compare different versions.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -36,7 +36,7 @@ export const updatePageTool: Tool = {
     },
     required: ['pageId', 'spaceKey', 'versionNumber']
   }
-};
+};;
 
 export async function executeUpdatePage(
   params: {
