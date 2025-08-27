@@ -84,18 +84,20 @@ AI Assistant: I'll create that page for you using createPage:
 
 ### getPageContent
 
-Retrieve complete page information including content, metadata, and relationships.
+Retrieve complete page information including content, metadata, and relationships. Supports historical version access for content comparison workflows.
 
 **Parameters:**
 - `pageId` (required): Unique page identifier
+- `versionNumber` (optional): Specific version number to retrieve historical content (from getPageVersions)
 
 **Example Usage:**
 ```
-Human: Get the content of page 123456
+Human: Get the content of page 123456, and also show me version 3 for comparison
 
-AI Assistant: I'll retrieve the page content using getPageContent:
-- Page ID: 123456
-- Fetching complete page information...
+AI Assistant: I'll retrieve both current and historical content using getPageContent:
+- Current version: getPageContent(123456)
+- Historical version: getPageContent(123456, versionNumber: 3)
+- Comparing content changes...
 ```
 
 **Response Format:**
@@ -339,7 +341,7 @@ AI Assistant: I'll search for authentication content using searchPages:
 
 ### getPageVersions
 
-Access complete page version history for change tracking and rollback preparation.
+Access complete page version history for change tracking and content comparison. Enhanced with experimental API for full history access.
 
 **Parameters:**
 - `pageId` (required): Page identifier
@@ -350,9 +352,10 @@ Access complete page version history for change tracking and rollback preparatio
 ```
 Human: Show me the version history of page 123456
 
-AI Assistant: I'll retrieve the version history using getPageVersions:
-- Page ID: 123456
-- Fetching all version information...
+AI Assistant: I'll retrieve the complete version history using getPageVersions:
+- Page ID: 123456  
+- Using experimental endpoint for complete history access
+- Fetching all version information with content links...
 ```
 
 **Response Format:**

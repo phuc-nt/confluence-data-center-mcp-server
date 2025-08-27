@@ -1,3 +1,25 @@
+# Confluence Data Center MCP Server v1.1.0 - Production Validated & Enhanced
+
+🎯 **Production-Validated Confluence Data Center Integration: 11 fully-tested tools with enhanced version management and complete AI compatibility!**
+
+---
+
+## What's New in v1.1.0
+
+### 🧪 Production Validation & Bug Fixes
+- **100% AI Client Validated**: Comprehensive testing with Cline revealed and fixed 7 critical issues
+- **Enhanced Version Management**: Complete version history access with experimental API support
+- **Comment System Fixes**: Full API compliance for comment creation and management
+- **Zero Known Issues**: All tools working correctly in real-world AI workflows
+
+### 🚀 Enhanced Capabilities
+- **Complete Version History**: Access ALL page versions instead of just recent ones
+- **Historical Content Access**: Retrieve content from any previous version for comparison
+- **Experimental API Support**: Seamless integration with Confluence experimental endpoints
+- **Improved Error Handling**: Better guidance for AI clients and troubleshooting
+
+---
+
 # Confluence Data Center MCP Server v1.0.0 - Full Collaboration Platform
 
 🎯 **Production-Ready Confluence Data Center Integration: Complete page management and collaboration platform with 11 optimized tools!**

@@ -110,15 +110,32 @@ npm run build
 **Create Pages with Natural Language:**
 
 ```
-Human: Create a new page called "API Documentation" in the DEV space with a simple structure
+Human: Create a new page called "API Documentation" in the dev space with a simple structure
 
 AI Assistant: I'll create that page for you using the createPage tool:
-□ Space: DEV
+□ Space: dev
 □ Title: "API Documentation" 
 □ Creating page with basic structure...
 
 ✅ Created page DEV-123: "API Documentation"
 🔗 View at: https://your-confluence-dc.company.com/pages/123456
+```
+
+**Version History & Content Comparison:**
+
+```
+Human: Show me the version history of page 123456 and compare current content with version 3
+
+AI Assistant: I'll get the version history and compare content for you:
+□ Using getPageVersions to get complete history...
+□ Found 8 versions from 2024-01-15 to 2024-08-27
+□ Using getPageContent for current version and version 3...
+□ Comparing content differences...
+
+✅ Version comparison complete:
+📊 Version 8 (current): 1,245 characters, last edited by John Doe
+📊 Version 3: 892 characters, edited 6 months ago by Jane Smith  
+🔍 Key changes: Added security section, updated API examples
 ```
 
 **Smart Content Search:**
