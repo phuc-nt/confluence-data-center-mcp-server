@@ -1,0 +1,86 @@
+### Quy tắc cơ bản
+
+- **Luôn sử dụng tiếng Việt để trả lời**
+- Đọc project documentation trước khi bắt đầu bất kỳ task nào
+- Tuân thủ workflow đã được định nghĩa trong project
+
+### Serena MCP Integration
+
+#### Kiểm tra Setup Serena - Workflow Chính Xác
+
+**WORKFLOW KIỂM TRA SERENA HOẠT ĐỘNG (Mỗi session):**
+
+```yaml
+Bước 1 - Kiểm tra Cache:
+  Command: list_files cho thư mục ".serena/cache"
+  Expected: Thư mục tồn tại với các file cache
+  
+Bước 2 - Kiểm tra Serena Executables:
+  Command: uvx --from git+https://github.com/oraios/serena
+  Expected: Hiển thị các executable: index-project, serena, serena-mcp-server
+  
+Bước 3 - Khởi động Serena MCP Server:
+  Command: uv run --directory /Users/phucnt/serena serena-mcp-server /Users/phucnt/Workspace/confluence-dc-mcp-server/.serena/project.yml
+  Expected: Server khởi động thành công, hiển thị log "Starting MCP server with X tools"
+  
+Bước 4 - Kích hoạt Project:
+  Action: use_mcp_tool với server_name="serena", tool_name="activate_project"
+  Args: {"project": "confluence-dc-mcp-server"}
+  Expected: "Activated existing project with name 'confluence-dc-mcp-server'"
+  
+Bước 5 - Test Tool Cơ bản:
+  Action: use_mcp_tool với tool_name="list_dir"
+  Args: {"relative_path": ".", "recursive": false}
+  Expected: Trả về danh sách thư mục và file trong project
+
+Validation Complete:
+  - Nếu tất cả bước thành công: Serena sẵn sàng sử dụng
+  - Nếu có lỗi: Thực hiện setup lại theo hướng dẫn dưới
+```
+
+**Nếu validation thất bại, cần thực hiện setup:**
+
+#### Setup Serena cho Project Mới (Dành cho Cline)
+
+1. **Cài đặt Serena cho project:**
+```bash
+uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+```
+**Lưu ý:** Lệnh này sẽ tự động:
+- Tải và cài đặt Serena
+- Tạo project config tại `.serena/project.yml`
+- Khởi động MCP server
+- Kích hoạt project và khởi tạo language server
+
+2. **Lập chỉ mục cho codebase:**
+```bash
+uvx --from git+https://github.com/oraios/serena index-project
+```
+**Quan trọng:** Quá trình này sẽ tốn vài phút tùy vào kích thước project
+
+3. **Không cần thêm bước nào khác:**
+- Serena MCP server đã chạy trong terminal
+- Project đã được tự động kích hoạt
+- Sẵn sàng sử dụng semantic search và code analysis tools
+
+#### Yêu cầu Sau Setup (Dành cho Cline)
+
+```yaml
+Setup Requirements:
+  - Serena đã được cài đặt cho project này
+  - Codebase đã được indexed với "uvx --from git+https://github.com/oraios/serena index-project"
+  - Cache được lưu tại .serena/cache/
+  - MCP server đang chạy trong terminal
+
+Session Activation:
+  - Serena tự động hoạt động qua MCP connection trong Cline
+  - Sử dụng use_mcp_tool với server_name="serena" để gọi các tools
+  - Không cần chạy thêm lệnh activation nào khác
+  - Serena cung cấp semantic search và code analysis tools
+  - Giúp tìm kiếm code theo ngữ nghĩa thay vì chỉ keyword matching
+```
+
+#### Lưu ý Quan trọng
+- **Cài đặt theo từng project:** Serena cần được setup riêng cho mỗi project
+- **Không cần cài lại uv:** Chỉ cần thực hiện 3 bước setup trên
+- **Bảo mật và hiệu quả:** Mỗi project có index riêng biệt để tránh nhập nhằng dữ liệu
